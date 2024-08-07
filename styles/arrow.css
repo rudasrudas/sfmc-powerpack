@@ -1,0 +1,10 @@
+.arrow.flip {
+    rotate: 180deg;
+}
+
+.arrow {
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    margin-inline: 2px;
+}

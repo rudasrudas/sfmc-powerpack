@@ -1,0 +1,15 @@
+#legacy.wide #divLeftNav {
+    width: 800px;
+}
+
+/* Override */
+
+#legacy .legacy-row {
+    display: flex;
+}
+
+#divContent {
+    display: flex;
+    width: 100%;
+    margin-left: 0px;
+}

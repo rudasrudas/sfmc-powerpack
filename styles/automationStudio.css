@@ -1,0 +1,18 @@
+#overviewItemsFilter .folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+html.fuelux div:has(> #overviewItemsFilter.wide) {
+    display: flex;
+}
+
+html.fuelux #overviewItemsFilter.wide {
+    width: 600px;
+    min-width: 600px;
+}
+
+html.fuelux #overviewItemsFilter.wide ~ div {
+    width: 100%;
+}

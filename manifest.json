@@ -1,0 +1,83 @@
+{
+    "name": "SFMC PowerPack",
+    "description": "Optimize everyday tasks in Salesforce Marketing Cloud with an extensive utility pack",
+    "version": "0.3.0",
+    "manifest_version": 3,
+    "icons": { 
+        "16": "sfmc-powerpack-logo-small.png",
+        "48": "sfmc-powerpack-logo-small.png",
+       "128": "sfmc-powerpack-logo.png" 
+    },
+    "background": {
+        "service_worker": "./background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://content-builder.s50.marketingcloudapps.com/*"],
+            "js": ["pages/localStorage.js", "pages/contentBuilder.js", "pages/messagePreviewLeft.js"],
+            "css": ["styles/contentBuilder.css", "styles/messagePreviewLeft.css", "styles/arrow.css"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://mc.s50.exacttarget.com/*"],
+            "js": ["pages/localStorage.js", "pages/exactTarget.js"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://members.s50.exacttarget.com/*"],
+            "js": ["pages/localStorage.js", "pages/subscribers.js"],
+            "css": ["styles/subscribers.css", "styles/arrow.css"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://members.s50.exacttarget.com/Content/Tracking2/*"],
+            "js": ["pages/tracking.js"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://mc.s50.marketingcloudapps.com/AutomationStudioFuel3/*"],
+            "js": ["pages/localStorage.js", "pages/automationStudio.js"],
+            "css": ["styles/automationStudio.css", "styles/arrow.css"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://mc.s50.exacttarget.com/cloud/tools/*", "https://querystudio.herokuapp.com/*"],
+            "js": [
+                "libs/ace/ace.js",
+                "libs/ace/mode/sqlserver.js",
+                "libs/ace/theme/sqlserver.js",
+                "pages/localStorage.js", 
+                "pages/queryStudio.js"
+            ],
+            "css": ["styles/queryStudio.css"],
+            "run_at": "document_end",
+            "all_frames": true
+        }
+    ],
+    "permissions": [
+        "storage",
+        "scripting"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "libs/ace/ace.js",
+                "libs/ace/mode/sqlserver.js",
+                "libs/ace/theme/sqlserver.js"
+            ],
+            "matches": ["<all_urls>"]
+        }
+    ],
+    "action": {
+        "default_icon": {
+            "16": "sfmc-powerpack-logo-small.png",
+            "48": "sfmc-powerpack-logo-small.png",
+            "128": "sfmc-powerpack-logo.png"
+        }
+    }
+}

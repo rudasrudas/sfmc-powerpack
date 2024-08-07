@@ -1,0 +1,67 @@
+.qs-tabs-container {
+    display: flex;
+    overflow-x: auto;
+    margin: 1rem 0 0 1rem;
+}
+
+.qs-add-new-tab:nth-child(11) {
+    display: none;
+}
+
+.qs-tab.slds-button {
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 0 0.75rem 0 1rem;
+}
+
+.qs-tab.slds-button:has(.qs-tab-input) {
+    padding: 0px;
+}
+
+.qs-tab.slds-button.slds-button_brand.active:has(.qs-tab-input) {
+    padding: 0px;
+    line-height: 1.875rem;
+}
+
+.qs-tab-input {
+    padding: 0 1rem;
+    border: 0px solid #dddbda;
+    line-height: 1.875rem;
+    border-radius: 0.25rem;
+    max-width: 150px;
+}
+
+.qs-tab .close {
+    cursor: pointer;
+    line-height: 1;
+    font-size: 20px;
+    margin-top: -2px;
+    opacity: 0.5;
+}
+
+.slds-button_brand .qs-tab-input {
+    color: black;
+}
+
+.qs-tab-input:focus {
+    outline: none;
+}
+
+.qs-editor {
+    height: 300px;
+    background-color: aquamarine;
+    margin: 10px;
+    position: relative;
+    width: calc(100% - 20px);
+}
+
+.qs-editor:not(.active) {
+    display: none;
+}
+
+#editor:not(.qs-editor) {
+    height: 0px;
+}

@@ -1,0 +1,14 @@
+/* GENERAL */
+.no-display {
+    display: none;
+}
+
+.activator {
+    padding-left: 15px;
+    background-color: #af70e9;
+    color: whitesmoke;
+    border: solid 1px #7b36bb;
+    border-radius: 5px;
+    min-width: 50px;
+    height: 20px;
+}

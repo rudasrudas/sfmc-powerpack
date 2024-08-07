@@ -1,0 +1,121 @@
+.mp-pill {
+    padding: 2px 4px;
+    background-color: #f0eeee;
+    color: #040920;
+    border-radius: 3px;
+    border: none;
+    box-shadow: none;
+    margin: 2px;
+    cursor: default;
+    word-break: break-all;
+    font-size: 11px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.mp-pill:hover {
+    cursor: pointer;
+    background-color: #ddd9d9;
+}
+
+.mp-pill.invalid {
+    background-color: #f8baba;
+}
+
+.mp-pill.invalid:hover {
+    background-color: #f3a5a5;
+}
+
+.mp-pill.duplicate {
+    background-color: #f8d8ba;
+}
+
+.mp-pill.duplicate:hover {
+    background-color: #f3cfa5;
+}
+
+.mp-pill-group {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    user-select: none;
+}
+
+.mp-pillbox-add-item {
+    border: none;
+    box-shadow: none;
+    padding: 0px 5px;
+    display: block;
+    height: 21px;
+    line-height: 1.4;
+    font-size: 11px;
+    background-color: transparent;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.mp-pillbox-add-item:nth-child(n+50) {
+    display: none;
+}
+
+.mp-pillbox-add-item:focus {
+    outline: none;
+}
+
+.mp-tab-input {
+    text-transform: uppercase;
+}
+
+.mp-tab-input:focus {
+    outline: none;
+}
+
+.mp-add-new-tab:nth-child(n+7) {
+    display: none;
+}
+
+.mp-tab-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mp-tab-group .new {
+    font-size: 12px;
+    line-height: 1;
+    margin-inline: -4px;
+}
+
+/* Overriding styles */
+
+.test-send-header {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    align-items: center;
+    width: max-content;
+}
+
+.messagepreview-testsendthreshold-content .col-md-3:has(.testsend-recipients) {
+    width: 100%;
+}
+
+.messagepreview-testsendthreshold.modal .col-md-3 .testsend-recipients {
+    height: 100%;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.messagepreview-testsendthreshold.modal .modal-content .modal-body {
+    height: 350px;
+}
+
+/* Subscriber select */
+
+.subscriberselector .subscriberselector-top-wrap .subscriberselector-folderbrowser.open {
+    max-width: 495px;
+    right: 495px;
+}
+
+.subscriberselector .fuelux3.repeater-container {
+    left: 495px; 
+}

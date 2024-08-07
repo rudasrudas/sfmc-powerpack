@@ -1,0 +1,21 @@
+.toggle-locations-header.nav.nav-tabs a.toggle-locations-view.active {
+    max-width: 100%;
+    width: 100%;
+}
+
+.fuelux.wide .contentmain .contentmain-leftpanel.panel.panel-default {
+    flex: 0 1 600px;
+}
+
+.fuelux .contentmain .fuelux-lightning-theme .nav-tab-vertical.cb-arrow-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    align-items: center;
+    justify-content: stretch;
+    margin-right: 2px;
+}
+
+.fuelux .contentmain .fuelux-lightning-theme .nav-tab-vertical.cb-arrow-wrapper > li:has(a) {
+    width: 100%;
+}
