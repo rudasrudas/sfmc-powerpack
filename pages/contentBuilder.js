@@ -1,4 +1,9 @@
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
+    const isActive = await isFeatureActive('folder-expand');
+    if(!isActive) return;
+    
+    activateCss();
+
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(async (mutation) => {
             if (mutation.type === 'childList') {
@@ -27,7 +32,7 @@ const insertExpandArrow = async () => {
     newArrow.classList.add('cb-expand-arrow', 'arrow');
     wrapper.classList.add('cb-arrow-wrapper')
     wrapper.appendChild(newArrow);
-    newArrow.src = 'https://cdn0.iconfinder.com/data/icons/flat-round-arrow-arrow-head/512/Red_Arrow_Head_Left-2-512.png'
+    newArrow.src = chrome.runtime.getURL("static/expand-circle.png");
 
     const isExpanded = await getData('contentBuilderExpand');
     if(isExpanded) {

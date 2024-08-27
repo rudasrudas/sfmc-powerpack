@@ -1,0 +1,147 @@
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    width: 300px;
+    overflow-y: auto;
+    margin: 0px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0;
+    width: 100%;
+}
+
+.category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 5px 0px 0px;
+    margin: 0 10px;
+    border-radius: 2px;
+}
+
+.category.border {
+    border-top: 2px solid #dd7a01;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+div.inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 64px;
+    transition: all 0.5s;
+}
+
+.cloud-bottom {
+    margin-top: 5px;
+    transition: all 0.5s;
+}
+
+.cloud-block {
+    margin-top: -5px;
+    background-color: #00a1e0;
+    min-height: 10px;
+    color: white;
+    padding: 5px;
+    transition: all 0.5s;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inactive {
+    filter: grayscale();
+}
+
+/* Text */
+
+@font-face {
+    font-family: "Salesforce Sans";
+    src: url('/static/fonts/SalesforceSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+span {
+    font-size: 14px;
+    color: #00396B;
+    font-family: "Salesforce Sans", Arial, sans-serif;
+    font-weight: 500;
+}
+
+span.small {
+    font-size: 10px;
+    color: white;
+    padding: 0px 5px;
+}
+
+a > span.small:hover {
+    text-decoration-color: white;
+    text-decoration: underline;
+}
+
+a:has(span.small) {
+    text-decoration: none;
+}
+
+/* Toggle */
+
+.toggle {
+    border: 2px solid #dd7a01;
+    border-radius: calc( 11px );
+    width: 36px;
+    height: 22px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.07s;
+    cursor: pointer;
+}
+
+.toggle::after {
+    content: "";
+    display: inline-block;
+    margin: 2px;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    background: #dd7a01;
+    transition: all 0.07s linear;
+}
+
+.toggle:checked {
+    background-color: #dd7a01;
+}
+
+.toggle:checked::after {
+    transform: translateX(14px);
+    background-color: white;
+}
+
+.toggle:hover {
+    transform: scale(1.0);
+}
+
+.toggle:active {
+    transform: scale(1.0);
+}
+
+.toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.1rem rgba(255,255,255,0.4);
+}

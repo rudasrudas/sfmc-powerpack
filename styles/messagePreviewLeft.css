@@ -85,9 +85,24 @@
     margin-inline: -4px;
 }
 
+.mp-switch-link {
+    padding: 6px 2px 0px 2px;
+    margin: 0 0 0 auto;
+    color: #0070d2;
+    background-color: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+    border: none;
+    width: fit-content;
+}
+
 /* Overriding styles */
 
-.test-send-header {
+body.sfmc-pp-active .test-send-header {
     display: flex;
     flex-wrap: nowrap;
     gap: 5px;
@@ -95,27 +110,35 @@
     width: max-content;
 }
 
-.messagepreview-testsendthreshold-content .col-md-3:has(.testsend-recipients) {
+body.sfmc-pp-active .messagepreview-testsendthreshold-content .col-md-3:has(.testsend-recipients) {
     width: 100%;
 }
 
-.messagepreview-testsendthreshold.modal .col-md-3 .testsend-recipients {
+body.sfmc-pp-active .messagepreview-testsendthreshold.modal .col-md-3 .testsend-recipients {
     height: 100%;
     font-size: 12px;
     line-height: 1.5;
 }
 
-.messagepreview-testsendthreshold.modal .modal-content .modal-body {
+body.sfmc-pp-active .messagepreview-testsendthreshold.modal .modal-content .modal-body {
     height: 350px;
 }
 
 /* Subscriber select */
 
-.subscriberselector .subscriberselector-top-wrap .subscriberselector-folderbrowser.open {
+body.sfmc-pp-active .subscriberselector .subscriberselector-top-wrap .subscriberselector-folderbrowser.open {
     max-width: 495px;
     right: 495px;
 }
 
-.subscriberselector .fuelux3.repeater-container {
+body.sfmc-pp-active .subscriberselector .fuelux3.repeater-container {
     left: 495px; 
+}
+
+.hidden {
+    display: none;
+}
+
+body.sfmc-pp-active .mp-tab-group.hidden ~ .test-send-recipients-tab-content.mp-tab-container {
+    display: none;
 }

@@ -2,7 +2,7 @@
 async function saveData(key, value) {
     try {
         await new Promise((resolve, reject) => {
-            chrome.storage.local.set({ [key]: value }, function() {
+            chrome.storage?.local.set({ [key]: value }, function() {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -35,4 +35,16 @@ function clearData(key) {
     } catch (err) {
         console.error(error);
     }
+}
+
+async function isFeatureActive(id) {
+    const isGlobalActive = await getData('settings global');
+    if(isGlobalActive === false) return false;
+    
+    const isActive = await getData('settings ' + id);
+    return isActive !== false;
+}
+
+function activateCss() {
+    document.querySelector('body').classList.add('sfmc-pp-active');
 }

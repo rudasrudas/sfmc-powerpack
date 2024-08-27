@@ -1,9 +1,20 @@
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
+    const isActive = await isFeatureActive('folder-id');
+    if(!isActive) return;
+    
+    activateCss();
+
     const observer = new MutationObserver(handleMutations);
 
     observer.observe(document.body, {
         childList: true, // Observe direct children
         subtree: true    // Observe all descendants
+    });
+
+    window.top.addEventListener('message', event => {
+        if (event.data.type === 'copyToClipboard') {
+            navigator.clipboard.writeText(event.data.text).catch(() => {});
+        }
     });
 });
 

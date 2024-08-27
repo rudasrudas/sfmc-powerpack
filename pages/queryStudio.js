@@ -1,7 +1,12 @@
 var tabsData = [];
 var aceEditor;
 
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
+    const isActive = await isFeatureActive('query-studio');
+    if(!isActive) return;
+    
+    activateCss();
+
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(async (mutation) => {
             if (mutation.type === 'childList') {
@@ -35,34 +40,64 @@ const initEditor = () => {
     const activeTab = tabsData.find(t => t.active)
     aceEditor.getSession().setValue(activeTab?.code || '');
     aceEditor.gotoPageDown();
-    // aceEditor.focus();
     aceEditor.setTheme('ace/theme/sqlserver');
     aceEditor.session.setMode('ace/mode/sqlserver');
     aceEditor.getSession().on('change', async () => {
+        updateOriginalEditor(aceEditor.getSession().getValue());
         tabsData = tabsData.map(t => ({
             ...t, 
             code: t.active ? aceEditor.getSession().getValue() : t.code
         }))
         await saveData('queryStudio', tabsData);
-        updateOriginalEditor();
     });
 
     orgEditor.parentElement.appendChild(copyEditor);
 }
 
-const updateOriginalEditor = () => {
+const updateOriginalEditor = (newValue) => {
     const originalEditor = document.querySelector('#editor');
     if(!originalEditor) return;
 
+    const activeTab = tabsData.find(t => t.active);
+    const activeTabQuery = newValue !== undefined ? newValue : (activeTab ? activeTab.code : '');
+    
     const textArea = originalEditor.querySelector('textarea');
     if(!textArea) return;
 
-    const activeTab = tabsData.find(t => t.active);
-    const activeTabQuery = activeTab ? activeTab.code : '';
-    textArea.value = activeTabQuery;
+    // Select everything in org editor
+    const ctrlAEvent = new KeyboardEvent('keydown', {
+        key: 'a',
+        code: 'KeyA',
+        keyCode: 65, // 'A' key
+        which: 65,
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: true,
+        metaKey: navigator.platform.includes('Mac'), // For Mac Command key
+    });
+    textArea.dispatchEvent(ctrlAEvent);
 
-    const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-    textArea.dispatchEvent(inputEvent);
+    // Delete everything in org editor
+    const backspaceEvent = new KeyboardEvent('keydown', {
+        key: 'Backspace',
+        code: 'Backspace',
+        keyCode: 8,
+        which: 8,
+        bubbles: true,
+        cancelable: true,
+    });
+    textArea.dispatchEvent(backspaceEvent);
+
+    // Paste new value
+    const pasteEvent = new ClipboardEvent('paste', {
+        bubbles: true,
+        cancelable: true,
+        clipboardData: new DataTransfer()
+    });
+    
+    pasteEvent.clipboardData.setData('text/plain', activeTabQuery);
+
+    textArea.dispatchEvent(pasteEvent);
 }
 
 const insertTabs = async () => {
@@ -172,7 +207,7 @@ const insertAddNewTabElement = (tabsContainer) => {
     element.innerText = '+';
     element.addEventListener('click', async (e) => {
 
-        if(tabsData.length >= 10) return
+        if(tabsData.length >= 50) return
 
         const firstAvailableNumber = () => {
             const arr = tabsData.map(t => {
@@ -203,9 +238,9 @@ const insertAddNewTabElement = (tabsContainer) => {
 
 const selectTab = async (tabsContainer, tab) => {
     //Update tab data
-    tab = tabsData.find(t => t.id === tab.id);
+    tab = tabsData.find(t => t?.id === tab.id);
 
-    tabsData = tabsData.map(t => ({ ...t, active: t.id === tab.id }));
+    tabsData = tabsData.map(t => ({ ...t, active: t?.id === tab.id }));
     await saveData('queryStudio', tabsData);
 
     [...tabsContainer.querySelectorAll('.qs-tab')].forEach(tabElement => {

@@ -1,18 +1,18 @@
-#overviewItemsFilter .folder-header {
+body.sfmc-pp-active #overviewItemsFilter .folder-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-html.fuelux div:has(> #overviewItemsFilter.wide) {
+html.fuelux body.sfmc-pp-active  div:has(> #overviewItemsFilter.wide) {
     display: flex;
 }
 
-html.fuelux #overviewItemsFilter.wide {
-    width: 600px;
-    min-width: 600px;
+html.fuelux body.sfmc-pp-active #overviewItemsFilter.wide {
+    width: 400px;
+    min-width: 400px;
 }
 
-html.fuelux #overviewItemsFilter.wide ~ div {
+html.fuelux body.sfmc-pp-active #overviewItemsFilter.wide ~ div {
     width: 100%;
 }

@@ -1,14 +1,46 @@
-#legacy.wide #divLeftNav {
+body.sfmc-pp-active #legacy.wide #divLeftNav {
     width: 800px;
+}
+
+.f-folder-label {
+    display: flex;
+    gap: 3px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.f-folder-label:active {
+    background-color: #33333320;
+}
+
+.f-folder-label {
+    cursor: pointer;
+}
+
+.f-folder-pretext {
+    user-select: none;
+}
+
+.f-folder-label > img {
+    width: 14px;
+    height: 14px;
+    user-select: none;
+}
+
+:has(>.f-folder-label) {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    align-items: center;
 }
 
 /* Override */
 
-#legacy .legacy-row {
+body.sfmc-pp-active #legacy .legacy-row {
     display: flex;
 }
 
-#divContent {
+body.sfmc-pp-active #divContent {
     display: flex;
     width: 100%;
     margin-left: 0px;

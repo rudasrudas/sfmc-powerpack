@@ -37,8 +37,13 @@ const setupMessageTabListener = () => {
 const onTestSendClick = async () => {
     const testRecipientWrap = document.querySelector('.test-send-wrap');
     const testRecipientBlock = testRecipientWrap.querySelector('.test-send-recipients');
+    const testRecipientOriginalContainer = testRecipientBlock.querySelector('.test-send-recipients-container:not(.mp-tab-container)');
     testRecipientBlock.classList.add('original-block');
-    [...testRecipientBlock.children].forEach(child => child.style.display = 'none');
+    [...testRecipientBlock.children].forEach(child => child.classList.add('hidden'));
+
+    const individualsOrgTab = testRecipientOriginalContainer.querySelector('.test-send-individuals');
+    const deOrgTab = testRecipientOriginalContainer.querySelector('.test-send-de');
+    individualsOrgTab.classList.add('hidden');
 
     ///////////////////
     // Recreating ui //
@@ -52,6 +57,27 @@ const onTestSendClick = async () => {
     const tabGroup = document.createElement('ul');
     tabGroup.classList.add('nav', 'nav-tabs', 'mp-tab-group');
     testRecipientBlock.appendChild(tabGroup);
+
+    // Add switch to return to test data extension option
+    const linkButton = document.createElement('div');
+    linkButton.classList.add('mp-switch-link');
+    linkButton.innerText = 'Select Test Data Extension';
+    linkButton.addEventListener('click', (e) => {
+        if(linkButton.classList.contains('is-test-de')) {
+            testRecipientOriginalContainer.classList.add('hidden');
+            tabGroup.classList.remove('hidden');
+            linkButton.innerText = 'Select Test Data Extension';
+            individualsOrgTab.click();
+        } else {
+            testRecipientOriginalContainer.classList.remove('hidden');
+            tabGroup.classList.add('hidden');
+            linkButton.innerText = 'Select Individual Emails';
+            deOrgTab.click();
+        }
+
+        linkButton.classList.toggle('is-test-de');
+    });
+    testRecipientBlock.appendChild(linkButton);
 
     const appendAddNewTab = () => {
         const button = document.createElement('li');
@@ -101,7 +127,7 @@ const onTestSendClick = async () => {
         const tab = document.createElement('li');
         tab.innerHTML = `<a href="#" data-tab="${id}"><span class="tab">${name}</span></a>`;
         tab.addEventListener('click', (e) => {
-            if(e.detail === 3) {
+            if(e.detail === 2) {
                 tab.innerHTML = `<input class="mp-tab-input" type="text" maxlength="10">`
                 const input = tab.querySelector('input');
                 input.value = addressData.find(t => t.id === id).name;
@@ -141,7 +167,7 @@ const onTestSendClick = async () => {
         });
 
         const tabContent = document.createElement('div');
-        tabContent.classList.add('test-send-recipients-tab-content');
+        tabContent.classList.add('test-send-recipients-tab-content', 'mp-tab-container');
         tabContent.innerHTML = `
         <div class="test-send-individuals tab-pane" role="tabpanel">
             <div class="pillbox test-send-recipients-pillbox">
@@ -150,17 +176,19 @@ const onTestSendClick = async () => {
                 </ul>
             </div>
         </div>`;
-        testRecipientBlock.appendChild(tabContent);
+        testRecipientBlock.insertBefore(tabContent, linkButton);
         const addItemInput = tabContent.querySelector('.mp-pillbox-add-item');
 
         const submitAllNewAddresses = () => {
             //Extract all addresses, and remove empty entries
-            const addresses = cleanAscii(addItemInput.value).split(/[, \n]+/).filter(address => address.length);
+            const addresses = cleanAscii(addItemInput.value).replace(/\s/g, ' ').split(/[\s,]+/).filter(address => address.length);
+            console.log(addItemInput.value, 'Addresses', addresses, cleanAscii(addItemInput.value).replace(/\s/g, ' ').split(/[\s,]+/));
             addresses.forEach(address => appendAddress(address, true));
             addItemInput.value = '';
         }
 
         const appendAddress = (address, save = false) => {
+            if(!address.length) return;
             const pillGroup = tabContent.querySelector('.mp-pill-group');
 
             if(pillGroup.children.length >= 50) return;
@@ -233,9 +261,9 @@ const onTestSendClick = async () => {
 
         if(active) {
             tab.classList.add('active');
-            tabContent.style.display = 'block';
+            tabContent.classList.remove('hidden');
         } else {
-            tabContent.style.display = 'none';
+            tabContent.classList.add('hidden');
         }
 
         tabList.push({
@@ -252,10 +280,10 @@ const onTestSendClick = async () => {
         tabList.forEach(tab => {
             if(tab.id === id) {
                 tab.element.classList.add('active')
-                tab.contentElement.style.display = 'block';
+                tab.contentElement.classList.remove('hidden');
             } else {
                 tab.element.classList.remove('active')
-                tab.contentElement.style.display = 'none';
+                tab.contentElement.classList.add('hidden');
             }
         })
 
@@ -334,7 +362,12 @@ const onTestSendClick = async () => {
     observeTabListElements();
 };
   
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
+    const isActive = await isFeatureActive('test-recipients');
+    if(!isActive) return;
+    
+    activateCss();
+
     observeForMessageCreateContainer();
 });
 

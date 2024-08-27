@@ -1,10 +1,11 @@
-.arrow.flip {
-    rotate: 180deg;
+body.sfmc-pp-active .arrow.flip {
+    rotate: -90deg;
 }
 
-.arrow {
+body.sfmc-pp-active .arrow {
     cursor: pointer;
     width: 14px;
     height: 14px;
     margin-inline: 2px;
+    rotate: 90deg;
 }
