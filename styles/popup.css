@@ -1,4 +1,10 @@
 
+:root {
+    --orange: #dd7a01;
+    --orange-dark: #d17d17;
+    --blue: #00a1e0;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -19,20 +25,26 @@ body {
     width: 100%;
 }
 
+.category-label {
+    color: var(--orange);
+    padding: 0px 0px 4px;
+    margin: 0px 10px 0px;
+    font-size: 10px;
+    font-weight: bold;
+    border-bottom: 2px solid var(--orange);
+}
+
+.category ~ .category-label {
+    margin-top: 15px;
+}
+
 .category {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    padding: 5px 0px 0px;
-    margin: 0 10px;
-    border-radius: 2px;
-}
-
-.category.border {
-    border-top: 2px solid #dd7a01;
-    margin-top: 10px;
-    padding-top: 10px;
+    padding: 2px 0px 0px;
+    margin: 0px 10px;
 }
 
 div.inline {
@@ -53,7 +65,7 @@ div.inline {
 
 .cloud-block {
     margin-top: -5px;
-    background-color: #00a1e0;
+    background-color: var(--blue);
     min-height: 10px;
     color: white;
     padding: 5px;
@@ -102,7 +114,7 @@ a:has(span.small) {
 /* Toggle */
 
 .toggle {
-    border: 2px solid #dd7a01;
+    border: 2px solid var(--orange);
     border-radius: calc( 11px );
     width: 36px;
     height: 22px;
@@ -113,6 +125,10 @@ a:has(span.small) {
     cursor: pointer;
 }
 
+.toggle:hover {
+    border-color: var(--orange-dark);
+}
+
 .toggle::after {
     content: "";
     display: inline-block;
@@ -120,12 +136,20 @@ a:has(span.small) {
     border-radius: 50%;
     width: 14px;
     height: 14px;
-    background: #dd7a01;
+    background: var(--orange);
     transition: all 0.07s linear;
 }
 
+.toggle:hover::after {
+    background: var(--orange-dark);
+}
+
 .toggle:checked {
-    background-color: #dd7a01;
+    background-color: var(--orange);
+}
+
+.toggle:checked:hover {
+    background-color: var(--orange-dark);
 }
 
 .toggle:checked::after {

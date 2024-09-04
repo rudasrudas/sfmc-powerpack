@@ -14,6 +14,8 @@ window.addEventListener('load', async function() {
     window.top.addEventListener('message', event => {
         if (event.data.type === 'copyToClipboard') {
             navigator.clipboard.writeText(event.data.text).catch(() => {});
+        } else if (event.data.type === 'openDE') {
+            javascript:getTopWindow().launchContent({ content: 'de-grid', object: 'dataextension', categoryId: event.data.value});
         }
     });
 });

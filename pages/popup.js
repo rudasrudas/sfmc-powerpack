@@ -2,14 +2,9 @@ const logo = document.querySelector('.logo');
 const cloudBottomImg = document.querySelector('.cloud-bottom');
 const cloudBlockImg = document.querySelector('.cloud-block');
 
-const globalToggle = document.querySelector('#global');
-const testRecipientsToggle = document.querySelector('#test-recipients');
-const folderExpandToggle = document.querySelector('#folder-expand');
-const folderIdToggle = document.querySelector('#folder-id');
-const totalExclusionToggle = document.querySelector('#total-exclusion');
-const queryStudioToggle = document.querySelector('#query-studio');
+const versionSpan = document.querySelector('.version');
 
-const toggles = [globalToggle, testRecipientsToggle, folderExpandToggle, folderIdToggle, totalExclusionToggle, queryStudioToggle];
+const toggles = document.querySelectorAll('.category input[type="checkbox"]')
 toggles.forEach(async (toggle) => {
     const isActive = await getData('settings ' + toggle.id);
     if(isActive !== false) toggle.checked = true;
@@ -17,6 +12,7 @@ toggles.forEach(async (toggle) => {
     if(isActive === false && toggle.id === 'global') {
         logo.classList.add('inactive');
         cloudBottomImg.classList.add('inactive');
+        cloudBlockImg.classList.add('inactive');
     }
 
     toggle.addEventListener('change', function() {
@@ -24,7 +20,7 @@ toggles.forEach(async (toggle) => {
     })
 });
 
-
+const globalToggle = document.querySelector('#global');
 globalToggle.addEventListener('change', function() {
     if(this.checked) {
         logo.classList.remove('inactive');
@@ -35,4 +31,11 @@ globalToggle.addEventListener('change', function() {
         cloudBottomImg.classList.add('inactive');
         cloudBlockImg.classList.add('inactive');
     }
+})
+
+
+chrome.management.getSelf((info) => {
+
+    console.log(info);
+    versionSpan.innerText = `Version ${info.version}`
 })

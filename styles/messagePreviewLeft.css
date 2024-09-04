@@ -139,6 +139,10 @@ body.sfmc-pp-active .subscriberselector .fuelux3.repeater-container {
     display: none;
 }
 
-body.sfmc-pp-active .mp-tab-group.hidden ~ .test-send-recipients-tab-content.mp-tab-container {
+body.sfmc-pp-active .test-send-ua {
     display: none;
+}
+
+body.sfmc-pp-active .test-send-recipients-tab-content > *:first-child {
+    display: none !important;
 }

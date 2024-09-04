@@ -9,8 +9,8 @@ html.fuelux body.sfmc-pp-active  div:has(> #overviewItemsFilter.wide) {
 }
 
 html.fuelux body.sfmc-pp-active #overviewItemsFilter.wide {
-    width: 400px;
-    min-width: 400px;
+    width: 40%;
+    min-width: 40%;
 }
 
 html.fuelux body.sfmc-pp-active #overviewItemsFilter.wide ~ div {

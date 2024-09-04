@@ -1,7 +1,7 @@
 {
     "name": "SFMC PowerPack",
     "description": "Optimize everyday tasks in Salesforce Marketing Cloud with an extensive utility pack",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "manifest_version": 3,
     "icons": { 
         "16": "sfmc-powerpack-logo-small.png",
@@ -13,6 +13,12 @@
             "matches": ["https://*.marketingcloudapps.com/contentbuilder*"],
             "js": ["pages/localStorage.js", "pages/contentBuilder.js", "pages/messagePreviewLeft.js"],
             "css": ["styles/contentBuilder.css", "styles/messagePreviewLeft.css", "styles/arrow.css"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": ["https://*.marketingcloudapps.com/contactsmeta*"],
+            "js": ["pages/localStorage.js", "pages/dataExtensionSearch.js"],
             "run_at": "document_end",
             "all_frames": true
         },
@@ -58,18 +64,29 @@
     ],
     "permissions": [
         "storage",
-        "clipboardWrite"
+        "clipboardWrite",
+        "cookies"
+    ],
+    "host_permissions": [
+        "https://*.exacttarget.com/"
     ],
     "web_accessible_resources": [
         {
             "resources": [
+                "static/expand-circle.svg",
+                "static/copy.svg",
+                "static/contacts.svg",
+                "static/search.svg"
+            ],
+            "matches": ["https://*.exacttarget.com/*", "https://*.marketingcloudapps.com/*"]
+        },
+        {
+            "resources": [
                 "libs/ace/ace.js",
                 "libs/ace/mode/sqlserver.js",
-                "libs/ace/theme/sqlserver.js",
-                "static/expand-circle.png",
-                "static/copy.svg"
+                "libs/ace/theme/sqlserver.js"
             ],
-            "matches": ["<all_urls>"]
+            "matches": ["https://querystudio.herokuapp.com/*"]
         }
     ],
     "action": {

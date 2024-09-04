@@ -37,159 +37,43 @@ const setupMessageTabListener = () => {
 const onTestSendClick = async () => {
     const testRecipientWrap = document.querySelector('.test-send-wrap');
     const testRecipientBlock = testRecipientWrap.querySelector('.test-send-recipients');
-    const testRecipientOriginalContainer = testRecipientBlock.querySelector('.test-send-recipients-container:not(.mp-tab-container)');
-    testRecipientBlock.classList.add('original-block');
-    [...testRecipientBlock.children].forEach(child => child.classList.add('hidden'));
-
-    const individualsOrgTab = testRecipientOriginalContainer.querySelector('.test-send-individuals');
-    const deOrgTab = testRecipientOriginalContainer.querySelector('.test-send-de');
-    individualsOrgTab.classList.add('hidden');
 
     ///////////////////
     // Recreating ui //
     ///////////////////
 
-    let businessUnit = await getData('businessUnit');
-
-    let tabList = [];
+    let individualsTabContent = undefined;
     let addressData = [];
 
     const tabGroup = document.createElement('ul');
     tabGroup.classList.add('nav', 'nav-tabs', 'mp-tab-group');
     testRecipientBlock.appendChild(tabGroup);
 
-    // Add switch to return to test data extension option
-    const linkButton = document.createElement('div');
-    linkButton.classList.add('mp-switch-link');
-    linkButton.innerText = 'Select Test Data Extension';
-    linkButton.addEventListener('click', (e) => {
-        if(linkButton.classList.contains('is-test-de')) {
-            testRecipientOriginalContainer.classList.add('hidden');
-            tabGroup.classList.remove('hidden');
-            linkButton.innerText = 'Select Test Data Extension';
-            individualsOrgTab.click();
-        } else {
-            testRecipientOriginalContainer.classList.remove('hidden');
-            tabGroup.classList.add('hidden');
-            linkButton.innerText = 'Select Individual Emails';
-            deOrgTab.click();
-        }
-
-        linkButton.classList.toggle('is-test-de');
-    });
-    testRecipientBlock.appendChild(linkButton);
-
-    const appendAddNewTab = () => {
-        const button = document.createElement('li');
-        button.classList.add('mp-add-new-tab');
-        button.innerHTML = `<a href="#"><span class="tab new">+</span></a>`;
-        button.addEventListener('click', (e) => {
-            if(tabList.length >= 7) return;
-
-            const orgHTML = button.innerHTML;
-            button.innerHTML = `<input class="mp-tab-input" type="text" maxlength="10">`
-            const input = button.querySelector('input');
-            input.focus();
-
-            input.addEventListener('keydown', (e) => {
-                if(e.key === 'Enter') {
-                    if(input.value.length) {
-                        // Create new tab
-                        const name = input.value;
-                        const id = crypto.randomUUID();
-                        const addresses = [];
-                        appendTab(name, id, addresses, false);
-                        addressData.push({
-                            name,
-                            id,
-                            addresses,
-                            valid: false
-                        })
-
-                        saveData(`addressData ${businessUnit}`, addressData);
-
-                        button.removeChild(input);
-                        button.innerHTML = orgHTML;
-                    }
-                }
-            })
-
-            input.addEventListener('focusout', (e) => {
-                button.removeChild(input);
-                button.innerHTML = orgHTML;
-            })
-        });
-
-        tabGroup.appendChild(button);
-    }
-
-    const appendTab = (name, id, addresses, active = false) => {
-        const tab = document.createElement('li');
-        tab.innerHTML = `<a href="#" data-tab="${id}"><span class="tab">${name}</span></a>`;
-        tab.addEventListener('click', (e) => {
-            if(e.detail === 2) {
-                tab.innerHTML = `<input class="mp-tab-input" type="text" maxlength="10">`
-                const input = tab.querySelector('input');
-                input.value = addressData.find(t => t.id === id).name;
-                input.focus();
-
-                input.addEventListener('keydown', (e) => {
-                    if(e.key === 'Enter') {
-                        if(input.value.length) {
-                            // Update tab
-                            const newValue = input.value
-                            addressData = addressData.map(t => {
-                                if(t.id !== id) return t;
-                                else return { ...t, name: newValue }
-                            })
-                            tab.removeChild(input);
-                            tab.innerHTML = `<a href="#" data-tab="${id}"><span class="tab">${newValue}</span></a>`;
-                        } else {
-                            tab.removeChild(input);
-                            tabGroup.removeChild(tab);
-                            const tabFromArray = tabList.pop(t => t.id === id);
-                            testRecipientBlock.removeChild(tabFromArray.contentElement);
-                            addressData = addressData.filter(t => t.id !== id);
-                        }
-
-                        saveData(`addressData ${businessUnit}`, addressData);
-                    }
-                })
-
-                input.addEventListener('blur', (e) => {
-                    setTimeout(() => {
-                        tab.innerHTML = `<a href="#" data-tab="${id}"><span class="tab">${addressData.find(t => t.id === id).name}</span></a>`;
-                    }, 0);
-                })
-            }
-
-            selectTab(id);
-        });
-
-        const tabContent = document.createElement('div');
-        tabContent.classList.add('test-send-recipients-tab-content', 'mp-tab-container');
-        tabContent.innerHTML = `
-        <div class="test-send-individuals tab-pane" role="tabpanel">
+    const initIndividualsTab = (addresses) => {
+        const tabContainer = document.querySelector('.test-send-recipients-tab-content')
+        individualsTabContent = document.createElement('div');
+        individualsTabContent.classList.add('test-send-individuals', 'tab-pane', 'mp-tab-container');
+        individualsTabContent.role = "tabpanel";
+        individualsTabContent.innerHTML = `
             <div class="pillbox test-send-recipients-pillbox">
-                <ul class="mp-pill-group" data-id="${id}">
+                <ul class="mp-pill-group">
                     <input type="text" class="mp-pillbox-add-item" placeholder="Add email address and press Enter">
                 </ul>
-            </div>
-        </div>`;
-        testRecipientBlock.insertBefore(tabContent, linkButton);
-        const addItemInput = tabContent.querySelector('.mp-pillbox-add-item');
+            </div>`;
+            tabContainer.appendChild(individualsTabContent);
+
+        const addItemInput = individualsTabContent.querySelector('.mp-pillbox-add-item');
 
         const submitAllNewAddresses = () => {
             //Extract all addresses, and remove empty entries
             const addresses = cleanAscii(addItemInput.value).replace(/\s/g, ' ').split(/[\s,]+/).filter(address => address.length);
-            console.log(addItemInput.value, 'Addresses', addresses, cleanAscii(addItemInput.value).replace(/\s/g, ' ').split(/[\s,]+/));
             addresses.forEach(address => appendAddress(address, true));
             addItemInput.value = '';
         }
 
         const appendAddress = (address, save = false) => {
             if(!address.length) return;
-            const pillGroup = tabContent.querySelector('.mp-pill-group');
+            const pillGroup = individualsTabContent.querySelector('.mp-pill-group');
 
             if(pillGroup.children.length >= 50) return;
 
@@ -200,20 +84,13 @@ const onTestSendClick = async () => {
             pill.addEventListener('click', (e) => {
                 pillGroup.removeChild(pill);
                 refreshPills();
-                addressData = addressData.map(tab => {
-                    if(tab.id !== pillGroup.dataset.id) return tab;
-                    
-                    tab.addresses = tab.addresses.filter(a => a !== address);
-                    return tab;
-                })
-                saveData(`addressData ${businessUnit}`, addressData);
+                addressData = addressData.filter(a => a !== address);
             })
 
             pillGroup.insertBefore(pill, addItemInput);
             if(save) {
-                addressData.find(tab => tab.id === pillGroup.dataset.id).addresses.push(address);
-                addressData.find(tab => tab.id === pillGroup.dataset.id).addresses.slice(50, -1);
-                saveData(`addressData ${businessUnit}`, addressData);
+                addressData.push(address);
+                addressData = addressData.slice(50, -1);
             }
             refreshPills();
         }
@@ -245,7 +122,7 @@ const onTestSendClick = async () => {
         })
 
         const refreshPills = () => {
-            const pillGroup = tabContent.querySelector('.mp-pill-group');
+            const pillGroup = individualsTabContent.querySelector('.mp-pill-group');
             const pills = [...pillGroup.querySelectorAll('.mp-pill')]
 
             pills.forEach(pill => {
@@ -258,108 +135,51 @@ const onTestSendClick = async () => {
 
         addresses.forEach(address => appendAddress(address));
         refreshPills();
-
-        if(active) {
-            tab.classList.add('active');
-            tabContent.classList.remove('hidden');
-        } else {
-            tabContent.classList.add('hidden');
-        }
-
-        tabList.push({
-            name, 
-            id, 
-            addresses, 
-            element: tab,
-            contentElement: tabContent
-        });
-        tabGroup.insertBefore(tab, tabGroup.querySelector('.mp-add-new-tab'));
     }
 
-    const selectTab = (id) => {
-        tabList.forEach(tab => {
-            if(tab.id === id) {
-                tab.element.classList.add('active')
-                tab.contentElement.classList.remove('hidden');
-            } else {
-                tab.element.classList.remove('active')
-                tab.contentElement.classList.add('hidden');
-            }
-        })
+    const loadFromOriginalAddressList = () => {
+        const emails = [];
 
-        addressData.forEach(tab => {
-            tab.active = tab.id === id;
-        })
-        saveData(`addressData ${businessUnit}`, addressData);
+        const originalPillgroup = testRecipientBlock.querySelector('.pill-group');
+        [...originalPillgroup.querySelectorAll('ul > li > span:first-child')].forEach((e) => emails.push(e.innerText));
+
+        return emails;
     }
 
     const updateOriginalAddressList = () => {
-        const activeTab = tabList.find(tab => tab.element.classList.contains('active'))
+        const individualsTab = document.querySelector('.mp-tab-container');
 
         // Remove all addresses
         const originalPillgroup = testRecipientBlock.querySelector('.pill-group');
         [...originalPillgroup.querySelectorAll('ul > li > span > span')].forEach((e) => e.parentElement.click());
 
-        if(!activeTab) return
+        if(!individualsTab) return
 
         // Add new addresses
-        const newAddressList = [...activeTab.contentElement.querySelectorAll('.mp-pill')].map(pill => pill.innerText)
+        const newAddressList = [...individualsTab.querySelectorAll('.mp-pill')].map(pill => pill.innerText)
         newAddressList.forEach(address => {
             let input = document.querySelector(".test-send-recipients-pillbox * * input");
             input.value = address;
             input.dispatchEvent(new KeyboardEvent("keydown", { bubbles:!0, keyCode:13 }));
         })
-    };
-      
-    const handleMutations = (mutationsList, observer) => {
-        updateOriginalAddressList();
-    };
-      
-    const observeTabListElements = () => {
-        tabList.forEach((item) => {
-            if (!item.contentElement) return
-            const observer = new MutationObserver(handleMutations);
-            const config = { attributes: true, childList: true, subtree: true };
-        
-            observer.observe(item.contentElement, config);
-            item.observer = observer;
-        });
-    };
-
-    addressData = await getData(`addressData ${businessUnit}`);
-
-    if(!addressData) {
-        addressData = [
-            {
-                name: 'Personal',
-                id: 'personal',
-                addresses: [],
-                active: true
-            },
-            {
-                name: 'Shared',
-                id: 'shared',
-                addresses: [],
-                active: false
-            },
-            {
-                name: 'Market',
-                id: 'market',
-                addresses: [],
-                active: false
-            }
-        ]
-
-        saveData(`addressData ${businessUnit}`, addressData);
     }
 
-    addressData.forEach((tab) => {
-        appendTab(tab.name, tab.id, tab.addresses, tab.active);
-    })
-    appendAddNewTab();
+    const mutateAddressList = () => {
+        updateOriginalAddressList();
+    }
+      
+    const observeTab = () => {
+        if (!individualsTabContent) return
+        console.log('mutating')
+        const observer = new MutationObserver(mutateAddressList);
+        const config = { attributes: true, childList: true, subtree: true };
+    
+        observer.observe(individualsTabContent, config);
+    };
 
-    updateOriginalAddressList();
-    observeTabListElements();
+    addressData = loadFromOriginalAddressList(); // READ EXISTING EMAILS
+    initIndividualsTab(addressData);
+    observeTab();
 };
   
 window.addEventListener('load', async function() {

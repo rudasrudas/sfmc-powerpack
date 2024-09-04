@@ -32,7 +32,7 @@ const insertExpandArrow = async () => {
     newArrow.classList.add('cb-expand-arrow', 'arrow');
     wrapper.classList.add('cb-arrow-wrapper')
     wrapper.appendChild(newArrow);
-    newArrow.src = chrome.runtime.getURL("static/expand-circle.png");
+    newArrow.src = chrome.runtime.getURL("static/expand-circle.svg");
 
     const isExpanded = await getData('contentBuilderExpand');
     if(isExpanded) {
