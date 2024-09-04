@@ -64,8 +64,7 @@
     ],
     "permissions": [
         "storage",
-        "clipboardWrite",
-        "cookies"
+        "clipboardWrite"
     ],
     "host_permissions": [
         "https://*.exacttarget.com/"
